@@ -60,9 +60,10 @@ def calculate_first(terminals, nonterminals, grammar, nullable):
     while changing:
         changing = False
         for head, body in grammar:
-            #
-            # --- FILL IN HERE IN QUESTION 2 ---
-            #
+            for i in range(0, len(body)):
+                if set(body[:i]).issubset(nullable) and (not first[body[i]].issubset(first[head])):
+                    first[head].update(first[body[i]])
+                    changing = True
             pass
     return first
 
