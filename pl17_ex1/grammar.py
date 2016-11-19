@@ -77,9 +77,23 @@ def calculate_follow(terminals, nonterminals, grammar, nullable, first):
         follow[a] = set()
     start_nonterminal = grammar[0][0]
     follow[start_nonterminal] = {EOF}
-    #
-    # --- FILL IN HERE IN QUESTION 2 ---
-    #
+    changing = True
+    while changing:
+        changing = False
+        for head, body in grammar:
+            for i in range(0, len(body)):
+                if body[i] in terminals:
+                     continue
+                if set(body[i+1:]).issubset(nullable) and (not follow[head].issubset(follow[body[i]])):
+                    follow[body[i]].update(follow[head])
+                    changing = True
+            for i in range(0, len(body)):
+                if body[i] in terminals:
+                     continue
+                for j in range(i+1, len(body)):
+                    if set(body[i+1:j]).issubset(nullable) and (not first[body[j]].issubset(follow[body[i]])):
+                        follow[body[i]].update(first[body[j]])
+                        changing = True
     return follow
 
 
@@ -88,9 +102,12 @@ def calculate_select(terminals, nonterminals, grammar, nullable, first, follow):
     Return a dictionary mapping rules to their SELECT (a.k.a. PREDICT) set
     """
     select = dict()
-    #
-    # --- FILL IN HERE IN QUESTION 2 ---
-    #
+    for head, body in grammar:
+        select[(head,body)] = set()
+        if len(body)>0:
+            select[(head,body)].update(first[body[0]])
+        if body in nullable or len(body) == 0:
+            select[(head,body)].update(follow[head])
     return select
 
 
