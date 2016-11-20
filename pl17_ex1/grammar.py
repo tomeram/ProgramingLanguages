@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 This module contains functions for analyzing a grammar, finding
 its NULLABLE, FIRST, FOLLOW and SELECT sets, and determining if it is
@@ -187,28 +185,39 @@ def analyze_grammar(grammar):
     print
 
 
-grammar_json_5a = [
-    (obj, (LB,RB)),                     # obj -> { }
-    (obj, (LB, members, RB)),           # obj -> { members }
-    (members, (keyvalue)),              # members -> keyvalue
-    (members, (members, members)),      # members -> members , members
-    (keyvalue, (STRING, COLON, value)), # keyvalue -> string : value
-    (value, (STRING)),                  # value -> string
-    (value, (INT)),                     # value -> int
-    (value, (obj)),                     # value -> obj
+grammar_json_4a = [
+    (obj,(LB,RB)),                      #obj -> { }
+    (obj,(LB,members,RB)),              #obj -> { members }
+    (members, (keyvalue,)),             #members -> keyvalue
+    (members,(members,COMMA,members)),  #members -> members , members
+    (keyvalue,(STRING,COLON,value)),    #keyvalue -> string : value
+    (value,(STRING,)),                  #value -> string
+    (value,(INT,)),                     #value -> int
+    (value,(obj,))                      #value -> obj
 
 ]
 
-grammar_json_5b = [
-    #
-    # --- FILL IN HERE IN QUESTION 5.b ---
-    #
+grammar_json_4b = [
+    (obj,(LB,members,RB)),              #obj -> { members }
+    (obj,(LB,RB)),                      #obj -> { }
+    (member, (keyvalue,)),              #member -> keyvalue
+    (members,(member,COMMA,members)),   #members -> member , members
+    (keyvalue,(STRING,COLON,value)),    #keyvalue -> string : value
+    (value,(STRING,)),                  #value -> string
+    (value,(INT,)),                     #value -> int
+    (value,(obj,))                      #value -> obj
 ]
 
-grammar_json_5c = [
-    #
-    # --- FILL IN HERE IN QUESTION 5.c ---
-    #
+grammar_json_4c = [
+    (obj,(LB,objTag)),                  #obj -> { objTag
+    (objTag,(RB,)),                     #objTag ->  }
+    (objTag,(members,RB)),              #objTag ->  members }
+    (member, (keyvalue,)),              #member -> keyvalue
+    (members,(member,COMMA,members)),   #members -> member , members
+    (keyvalue,(STRING,COLON,value)),    #keyvalue -> string : value
+    (value,(STRING,)),                  #value -> string
+    (value,(INT,)),                     #value -> int
+    (value,(obj,))                      #value -> obj
 ]
 
 grammar_json__6 = [
@@ -220,18 +229,18 @@ grammar_json__6 = [
 
 
 def main():
-    analyze_grammar(grammar_recitation)
-    print
+    #analyze_grammar(grammar_recitation)
+    #print
 
     #
     # --- UNCOMMENT THE FOLLOWING LINES AS YOU PROCEED ---
     #
-    analyze_grammar(grammar_json_5a)
+    analyze_grammar(grammar_json_4a)
     print
-    # analyze_grammar(grammar_json_5b)
-    # print
-    # analyze_grammar(grammar_json_5c)
-    # print
+    analyze_grammar(grammar_json_4b)
+    print
+    analyze_grammar(grammar_json_4c)
+    print
     # analyze_grammar(grammar_json_6)
     # print
 

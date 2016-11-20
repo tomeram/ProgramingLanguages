@@ -43,3 +43,5 @@ value = 'value'
 #
 # --- ADD MORE NONTERMINALS HERE IF NEEDED IN QUESTION 5
 #
+member = 'member'
+objTag = 'objTag'

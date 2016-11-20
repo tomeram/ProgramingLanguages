@@ -1,0 +1,149 @@
+Python 2.7 (r27:82525, Jul  4 2010, 07:43:08) [MSC v.1500 64 bit (AMD64)] on win32
+Type "copyright", "credits" or "license()" for more information.
+>>> ================================ RESTART ================================
+>>> 
+Analyzing grammar:
+    obj -> LB RB
+    obj -> LB members RB
+    members -> keyvalue
+    members -> members COMMA members
+    keyvalue -> STRING COLON value
+    value -> STRING
+    value -> INT
+    value -> obj
+
+terminals =  set(['LB', 'STRING', 'INT', 'COLON', 'RB', 'COMMA'])
+nonterminals =  set(['keyvalue', 'obj', 'value', 'members'])
+
+nullable =  set([])
+
+first(COLON) = set(['COLON'])
+first(COMMA) = set(['COMMA'])
+first(INT) = set(['INT'])
+first(LB) = set(['LB'])
+first(RB) = set(['RB'])
+first(STRING) = set(['STRING'])
+first(keyvalue) = set(['STRING'])
+first(members) = set(['STRING'])
+first(obj) = set(['LB'])
+first(value) = set(['INT', 'LB', 'STRING'])
+
+follow(keyvalue) = set(['COMMA', 'RB'])
+follow(members) = set(['COMMA', 'RB'])
+follow(obj) = set(['COMMA', 'EOF', 'RB'])
+follow(value) = set(['COMMA', 'RB'])
+
+select(keyvalue -> STRING COLON value) = set(['STRING'])
+select(members -> keyvalue) = set(['STRING'])
+select(members -> members COMMA members) = set(['STRING'])
+select(obj -> LB RB) = set(['LB'])
+select(obj -> LB members RB) = set(['LB'])
+select(value -> INT) = set(['INT'])
+select(value -> STRING) = set(['STRING'])
+select(value -> obj) = set(['LB'])
+
+Grammar is not LL(1), as the following rules have intersecting SELECT sets:
+    obj -> LB RB
+    obj -> LB members RB
+Grammar is not LL(1), as the following rules have intersecting SELECT sets:
+    members -> keyvalue
+    members -> members COMMA members
+
+
+Analyzing grammar:
+    obj -> LB members RB
+    obj -> LB RB
+    member -> keyvalue
+    members -> member COMMA members
+    keyvalue -> STRING COLON value
+    value -> STRING
+    value -> INT
+    value -> obj
+
+terminals =  set(['LB', 'STRING', 'INT', 'COLON', 'RB', 'COMMA'])
+nonterminals =  set(['member', 'keyvalue', 'obj', 'value', 'members'])
+
+nullable =  set([])
+
+first(COLON) = set(['COLON'])
+first(COMMA) = set(['COMMA'])
+first(INT) = set(['INT'])
+first(LB) = set(['LB'])
+first(RB) = set(['RB'])
+first(STRING) = set(['STRING'])
+first(keyvalue) = set(['STRING'])
+first(member) = set(['STRING'])
+first(members) = set(['STRING'])
+first(obj) = set(['LB'])
+first(value) = set(['INT', 'LB', 'STRING'])
+
+follow(keyvalue) = set(['COMMA'])
+follow(member) = set(['COMMA'])
+follow(members) = set(['RB'])
+follow(obj) = set(['COMMA', 'EOF'])
+follow(value) = set(['COMMA'])
+
+select(keyvalue -> STRING COLON value) = set(['STRING'])
+select(member -> keyvalue) = set(['STRING'])
+select(members -> member COMMA members) = set(['STRING'])
+select(obj -> LB RB) = set(['LB'])
+select(obj -> LB members RB) = set(['LB'])
+select(value -> INT) = set(['INT'])
+select(value -> STRING) = set(['STRING'])
+select(value -> obj) = set(['LB'])
+
+Grammar is not LL(1), as the following rules have intersecting SELECT sets:
+    obj -> LB members RB
+    obj -> LB RB
+
+
+Analyzing grammar:
+    obj -> LB objTag
+    objTag -> RB
+    objTag -> members RB
+    member -> keyvalue
+    members -> member COMMA members
+    keyvalue -> STRING COLON value
+    value -> STRING
+    value -> INT
+    value -> obj
+
+terminals =  set(['LB', 'STRING', 'INT', 'COLON', 'RB', 'COMMA'])
+nonterminals =  set(['obj', 'objTag', 'value', 'member', 'keyvalue', 'members'])
+
+nullable =  set([])
+
+first(COLON) = set(['COLON'])
+first(COMMA) = set(['COMMA'])
+first(INT) = set(['INT'])
+first(LB) = set(['LB'])
+first(RB) = set(['RB'])
+first(STRING) = set(['STRING'])
+first(keyvalue) = set(['STRING'])
+first(member) = set(['STRING'])
+first(members) = set(['STRING'])
+first(obj) = set(['LB'])
+first(objTag) = set(['STRING', 'RB'])
+first(value) = set(['INT', 'LB', 'STRING'])
+
+follow(keyvalue) = set(['COMMA'])
+follow(member) = set(['COMMA'])
+follow(members) = set(['RB'])
+follow(obj) = set(['COMMA', 'EOF'])
+follow(objTag) = set(['COMMA', 'EOF'])
+follow(value) = set(['COMMA'])
+
+select(keyvalue -> STRING COLON value) = set(['STRING'])
+select(member -> keyvalue) = set(['STRING'])
+select(members -> member COMMA members) = set(['STRING'])
+select(obj -> LB objTag) = set(['LB'])
+select(objTag -> RB) = set(['RB'])
+select(objTag -> members RB) = set(['STRING'])
+select(value -> INT) = set(['INT'])
+select(value -> STRING) = set(['STRING'])
+select(value -> obj) = set(['LB'])
+
+Grammar is LL(1).
+
+
+>>> 
