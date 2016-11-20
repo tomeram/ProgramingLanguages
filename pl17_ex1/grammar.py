@@ -199,21 +199,25 @@ grammar_json_4a = [
 
 grammar_json_4b = [
     (obj,(LB,members,RB)),              #obj -> { members }
-    (obj,(empty,)),                     #obj -> empty
+    (obj,(LB,RB)),                      #obj -> { }
     (member, (keyvalue,)),              #member -> keyvalue
     (members,(member,COMMA,members)),   #members -> member , members
-    (empty,()),                         #empty -> { }
     (keyvalue,(STRING,COLON,value)),    #keyvalue -> string : value
     (value,(STRING,)),                  #value -> string
     (value,(INT,)),                     #value -> int
     (value,(obj,))                      #value -> obj
-
 ]
 
 grammar_json_4c = [
-    #
-    # --- FILL IN HERE IN QUESTION 5.c ---
-    #
+    (obj,(LB,objTag)),                  #obj -> { objTag
+    (objTag,(RB,)),                     #objTag ->  }
+    (objTag,(members,RB)),              #objTag ->  members }
+    (member, (keyvalue,)),              #member -> keyvalue
+    (members,(member,COMMA,members)),   #members -> member , members
+    (keyvalue,(STRING,COLON,value)),    #keyvalue -> string : value
+    (value,(STRING,)),                  #value -> string
+    (value,(INT,)),                     #value -> int
+    (value,(obj,))                      #value -> obj
 ]
 
 grammar_json__6 = [
@@ -225,8 +229,8 @@ grammar_json__6 = [
 
 
 def main():
-    analyze_grammar(grammar_recitation)
-    print
+    #analyze_grammar(grammar_recitation)
+    #print
 
     #
     # --- UNCOMMENT THE FOLLOWING LINES AS YOU PROCEED ---
@@ -235,8 +239,8 @@ def main():
     print
     analyze_grammar(grammar_json_4b)
     print
-    # analyze_grammar(grammar_json_4c)
-    # print
+    analyze_grammar(grammar_json_4c)
+    print
     # analyze_grammar(grammar_json_6)
     # print
 
