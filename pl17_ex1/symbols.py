@@ -45,3 +45,4 @@ value = 'value'
 #
 member = 'member'
 objTag = 'objTag'
+memTag = 'memTag'
