@@ -200,8 +200,7 @@ grammar_json_4a = [
 grammar_json_4b = [
     (obj,(LB,members,RB)),              #obj -> { members }
     (obj,(LB,RB)),                      #obj -> { }
-    (member, (keyvalue,)),              #member -> keyvalue
-    (members,(member,COMMA,members)),   #members -> member , members
+    (members,(keyvalue,COMMA,members)), #members -> keyvalue , members
     (keyvalue,(STRING,COLON,value)),    #keyvalue -> string : value
     (value,(STRING,)),                  #value -> string
     (value,(INT,)),                     #value -> int
@@ -209,11 +208,11 @@ grammar_json_4b = [
 ]
 
 grammar_json_4c = [
-    (obj,(LB,objTag)),                  #obj -> { objTag
-    (objTag,(RB,)),                     #objTag ->  }
-    (objTag,(members,RB)),              #objTag ->  members }
-    (member, (keyvalue,)),              #member -> keyvalue
-    (members,(member,COMMA,members)),   #members -> member , members
+    (obj,(LB,members)),                 #obj -> { members
+    (members,(keyvalue,memTag)),        #members -> keyvalue memTag
+    (members,(RB,)),                    #members ->  }            
+    (memTag, (COMMA,keyvalue,memTag)),  #memTag ->  , keyvalue memTag
+    (memTag, (RB,)),                    #memTag -> }
     (keyvalue,(STRING,COLON,value)),    #keyvalue -> string : value
     (value,(STRING,)),                  #value -> string
     (value,(INT,)),                     #value -> int
