@@ -228,8 +228,8 @@ grammar_json__6 = [
 
 
 def main():
-    #analyze_grammar(grammar_recitation)
-    #print
+    analyze_grammar(grammar_recitation)
+    print
 
     #
     # --- UNCOMMENT THE FOLLOWING LINES AS YOU PROCEED ---
