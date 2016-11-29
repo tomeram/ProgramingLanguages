@@ -39,6 +39,15 @@ def eval_arith_expr(e, s):
     elif type(e) is Minus:
         return eval_arith_expr(e.a1, s) - eval_arith_expr(e.a2, s)
 
+    elif type(e) is BitAnd:
+        return eval_arith_expr(e.a1, s) & eval_arith_expr(e.a2, s)
+
+    elif type(e) is BitShiftLeft:
+        return eval_arith_expr(e.a1, s) << eval_arith_expr(e.a2, s)
+
+    elif type(e) is BitShiftRight:
+        return eval_arith_expr(e.a1, s) >> eval_arith_expr(e.a2, s)
+    
     else:
         assert False # Error
 
@@ -54,22 +63,22 @@ def eval_bool_expr(e, s):
     """
 
     if type(e) is BLit:
-        return e.value
+        return tt if e.value else ff
 
     elif type(e) is Eq:
-        return eval_arith_expr(e.a1, s) == eval_arith_expr(e.a2, s)
+        return  tt if eval_arith_expr(e.a1, s) == eval_arith_expr(e.a2, s) else ff
 
     elif type(e) is LE:
-        return eval_arith_expr(e.a1, s) <= eval_arith_expr(e.a2, s)
+        return tt if eval_arith_expr(e.a1, s) <= eval_arith_expr(e.a2, s) else ff
 
     elif type(e) is Not:
-        return not eval_bool_expr(e.b, s)
+        return  tt if not eval_bool_expr(e.b, s) else ff
 
     elif type(e) is And:
-        return eval_bool_expr(e.b1, s) and eval_bool_expr(e.b2, s)
+        return  tt if eval_bool_expr(e.b1, s) and eval_bool_expr(e.b2, s) else ff
 
     elif type(e) is Or:
-        return eval_bool_expr(e.b1, s) or eval_bool_expr(e.b2, s)
+        return  tt if eval_bool_expr(e.b1, s) or eval_bool_expr(e.b2, s) else ff
 
     else:
         assert False # Error
