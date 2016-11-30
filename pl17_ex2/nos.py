@@ -34,20 +34,20 @@ def nos(S, s):
         spp = nos(S.S2, sp)
         return spp
 
-    elif type(S) is If and eval_bool_expr(S.b, s) is True:
+    elif type(S) is If and eval_bool_expr(S.b, s) == tt:
         sp = nos(S.S1, s)
         return sp
 
-    elif type(S) is If and eval_bool_expr(S.b, s) is False:
+    elif type(S) is If and eval_bool_expr(S.b, s) == ff:
         sp = nos(S.S2, s)
         return sp
 
-    elif type(S) is While and eval_bool_expr(S.b, s) is True:
+    elif type(S) is While and eval_bool_expr(S.b, s) == tt:
         sp = nos(S.S, s)
         spp = nos(While(S.b, S.S), sp)
         return spp
 
-    elif type(S) is While and eval_bool_expr(S.b, s) is False:
+    elif type(S) is While and eval_bool_expr(S.b, s) == ff:
         return s
 
     else:
@@ -62,6 +62,14 @@ if __name__ == '__main__':
 
     print nos(prog, {'x': 5})
 
-    #
-    # --- ADD MORE TESTS HERE ---
-    #
+    prog1d = Comp(Assign('a', ALit(84)),
+                  Comp(Assign('b', ALit(22)),
+                       Comp(Assign('c', ALit(0)),
+                            While(Not(Eq(Var('b'), ALit(0))),
+                                  Comp(If(Not(Eq(BitAnd(Var('b'), ALit(1)), ALit(0)))
+                                          , Assign('c', Plus(Var('c'), Var('a')))
+                                          , Skip()),
+                                       Comp(Assign('a', BitShiftLeft(Var('a'), ALit(1))),
+                                            Assign('b', BitShiftRight(Var('b'), ALit(1)))))))))
+
+    print nos(prog1d, {})
