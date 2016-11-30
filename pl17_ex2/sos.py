@@ -75,6 +75,14 @@ if __name__ == '__main__':
 
     run_sos(prog, {'x': 5})
 
-    #
-    # --- ADD MORE TESTS HERE ---
-    #
+    prog1d = Comp(Assign('a', ALit(84)),
+                  Comp(Assign('b', ALit(22)),
+                       Comp(Assign('c', ALit(0)),
+                            While(Not(Eq(Var('b'), ALit(0))),
+                                  Comp(If(Not(Eq(BitAnd(Var('b'), ALit(1)), ALit(0)))
+                                          , Assign('c', Plus(Var('c'), Var('a')))
+                                          , Skip()),
+                                       Comp(Assign('a', BitShiftLeft(Var('a'), ALit(1))),
+                                            Assign('b', BitShiftRight(Var('b'), ALit(1)))))))))
+
+    run_sos(prog1d, {})

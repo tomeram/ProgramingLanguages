@@ -86,7 +86,7 @@ if __name__ == '__main__':
 			While(Not(Eq(Var('b'), ALit(0))),
 				Comp(If(Not(Eq(BitAnd(Var('b'), ALit(1)), ALit(0)))
 				,Assign('c', Plus(Var('c'), Var('a')))
-				,Skip),
+				,Skip()),
 					Comp(Assign('a', BitShiftLeft(Var('a'), ALit(1))),
 						Assign('b', BitShiftRight(Var('b'), ALit(1)))))))))
 						
