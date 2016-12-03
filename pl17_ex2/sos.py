@@ -9,6 +9,7 @@ http://www.daimi.au.dk/~bra8130/Wiley_book/wiley.pdf (the book).
 from while_ast import *
 from expr import *
 
+
 def sos(S, s):
     """
     Structural Operational Semantics (SOS) of statements
@@ -49,8 +50,11 @@ def sos(S, s):
     elif type(S) is While:
         return (If(S.b, Comp(S.S, While(S.b, S.S)), Skip()), s)
 
+    elif type(S) is Repeat:
+        return (If(S.b, Comp(S.S, If(S.b, Repeat(S.b, S.S), Skip())), S.S), s)
+
     else:
-        assert False # Error
+        assert False  # Error
 
 
 def run_sos(S, s):
@@ -68,21 +72,28 @@ def run_sos(S, s):
 
 
 if __name__ == '__main__':
-    prog = Comp(Assign('y', ALit(1)),
-                While(Not(Eq(Var('x'), ALit(1))),
-                      Comp(Assign('y', Times(Var('y'), Var('x'))),
-                           Assign('x', Minus(Var('x'), ALit(1))))))
+    # prog = Comp(Assign('y', ALit(1)),
+    #             While(Not(Eq(Var('x'), ALit(1))),
+    #                   Comp(Assign('y', Times(Var('y'), Var('x'))),
+    #                        Assign('x', Minus(Var('x'), ALit(1))))))
+    #
+    # run_sos(prog, {'x': 5})
+    #
+    # prog1d = Comp(Assign('a', ALit(84)),
+    #               Comp(Assign('b', ALit(22)),
+    #                    Comp(Assign('c', ALit(0)),
+    #                         While(Not(Eq(Var('b'), ALit(0))),
+    #                               Comp(If(Not(Eq(BitAnd(Var('b'), ALit(1)), ALit(0)))
+    #                                       , Assign('c', Plus(Var('c'), Var('a')))
+    #                                       , Skip()),
+    #                                    Comp(Assign('a', BitShiftLeft(Var('a'), ALit(1))),
+    #                                         Assign('b', BitShiftRight(Var('b'), ALit(1)))))))))
+    #
+    # run_sos(prog1d, {})
 
-    run_sos(prog, {'x': 5})
+    prog3e = Comp(Assign('a', ALit(0)),
+                  Repeat(Not(Eq(Var('a'), ALit(10))),
+                         Comp(Assign('a', Plus(Var('a'), ALit(1))),
+                              Skip())))
 
-    prog1d = Comp(Assign('a', ALit(84)),
-                  Comp(Assign('b', ALit(22)),
-                       Comp(Assign('c', ALit(0)),
-                            While(Not(Eq(Var('b'), ALit(0))),
-                                  Comp(If(Not(Eq(BitAnd(Var('b'), ALit(1)), ALit(0)))
-                                          , Assign('c', Plus(Var('c'), Var('a')))
-                                          , Skip()),
-                                       Comp(Assign('a', BitShiftLeft(Var('a'), ALit(1))),
-                                            Assign('b', BitShiftRight(Var('b'), ALit(1)))))))))
-
-    run_sos(prog1d, {})
+    run_sos(prog3e, {})
