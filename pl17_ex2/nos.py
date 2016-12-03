@@ -50,6 +50,15 @@ def nos(S, s):
     elif type(S) is While and eval_bool_expr(S.b, s) == ff:
         return s
 
+    elif type(S) is Repeat and eval_bool_expr(S.b, s) == tt:
+        sp = nos(S.S, s)
+        spp = nos(Repeat(S.b, S.S), sp)
+        return spp
+
+    elif type(S) is Repeat and eval_bool_expr(S.b, s) == ff:
+        sp = nos(S.S, s)
+        return sp
+
     else:
         assert False # Error
 

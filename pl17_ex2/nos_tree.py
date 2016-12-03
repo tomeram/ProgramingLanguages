@@ -59,6 +59,19 @@ def nos_tree(S, s):
         premises = ()
         post_state = s
 
+    elif type(S) is Repeat and eval_bool_expr(S.b, s) == tt:
+        rule = 'repeat_tt'
+        sp, t1 = nos_tree(S.S, s)
+        spp, t2 = nos_tree(Repeat(S.b, S.S), sp)
+        premises = (t1, t2)
+        post_state = spp
+
+    elif type(S) is Repeat and eval_bool_expr(S.b, s) == ff:
+        rule = 'repeat_ff'
+        sp, t1 = nos_tree(S.S, s)
+        premises = (t1)
+        post_state = sp
+
     else:
         assert False # Error
 
@@ -80,16 +93,16 @@ if __name__ == '__main__':
     print
     view_tree(tree)
 
-    prog1d =Comp(Assign('a', ALit(84)),
-	Comp(Assign('b', ALit(22)),
-		Comp(Assign('c', ALit(0)),
-			While(Not(Eq(Var('b'), ALit(0))),
-				Comp(If(Not(Eq(BitAnd(Var('b'), ALit(1)), ALit(0)))
-				,Assign('c', Plus(Var('c'), Var('a')))
-				,Skip()),
-					Comp(Assign('a', BitShiftLeft(Var('a'), ALit(1))),
-						Assign('b', BitShiftRight(Var('b'), ALit(1)))))))))
-						
+    prog1d = Comp(Assign('a', ALit(84)),
+                  Comp(Assign('b', ALit(22)),
+                       Comp(Assign('c', ALit(0)),
+                            While(Not(Eq(Var('b'), ALit(0))),
+                                  Comp(If(Not(Eq(BitAnd(Var('b'), ALit(1)), ALit(0)))
+                                          , Assign('c', Plus(Var('c'), Var('a')))
+                                          , Skip()),
+                                       Comp(Assign('a', BitShiftLeft(Var('a'), ALit(1))),
+                                            Assign('b', BitShiftRight(Var('b'), ALit(1)))))))))
+
     s1, tree1 = nos_tree(prog1d, {})
     print s1
     print
