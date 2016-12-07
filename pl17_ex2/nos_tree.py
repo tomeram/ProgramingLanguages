@@ -60,21 +60,21 @@ def nos_tree(S, s):
         post_state = s
 
     elif type(S) is Repeat and eval_bool_expr(S.b, s) == tt:
+        rule = 'repeat_ff'
+        sp, t1 = nos_tree(S.S, s)
+        premises = (t1, )
+        post_state = sp
+
+    elif type(S) is Repeat and eval_bool_expr(S.b, s) == ff:
         rule = 'repeat_tt'
         sp, t1 = nos_tree(S.S, s)
 
-        if eval_bool_expr(S.b, sp) == tt:
+        if eval_bool_expr(S.b, sp) == ff:
             sp, t2 = nos_tree(Repeat(S.b, S.S), sp)
             premises = (t1, t2)
         else:
             premises = (t1, )
 
-        post_state = sp
-
-    elif type(S) is Repeat and eval_bool_expr(S.b, s) == ff:
-        rule = 'repeat_ff'
-        sp, t1 = nos_tree(S.S, s)
-        premises = (t1, )
         post_state = sp
 
     else:

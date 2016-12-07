@@ -51,7 +51,7 @@ def sos(S, s):
         return (If(S.b, Comp(S.S, While(S.b, S.S)), Skip()), s)
 
     elif type(S) is Repeat:
-        return (If(S.b, Comp(S.S, If(S.b, Repeat(S.b, S.S), Skip())), S.S), s)
+        return (Comp(S.S, If(S.b, Skip(), Repeat(S.b, S.S))), s)
 
     else:
         assert False  # Error
