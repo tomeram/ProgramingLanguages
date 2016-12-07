@@ -9,6 +9,7 @@ http://www.daimi.au.dk/~bra8130/Wiley_book/wiley.pdf (the book).
 from while_ast import *
 from expr import *
 
+
 def sos(S, s):
     """
     Structural Operational Semantics (SOS) of statements
@@ -49,8 +50,11 @@ def sos(S, s):
     elif type(S) is While:
         return (If(S.b, Comp(S.S, While(S.b, S.S)), Skip()), s)
 
+    elif type(S) is Repeat:
+        return (Comp(S.S, If(S.b, Skip(), Repeat(S.b, S.S))), s)
+
     else:
-        assert False # Error
+        assert False  # Error
 
 
 def run_sos(S, s):
