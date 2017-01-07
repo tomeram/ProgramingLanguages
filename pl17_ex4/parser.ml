@@ -25,7 +25,7 @@ exception SyntaxError of string
   ADD FUNCTIONS BELOW
 *)
 
- (*parse_term*)
+ (* parse_term : token list -> term * token list *)
 let rec parse_term = function
 	| (Literal c) :: ts -> (Variable c, ts) (* id *)
 	| LParen :: LambdaTok :: (Literal c) :: DotTok :: ts -> let (t, ts1) = parse_term ts in 
@@ -57,7 +57,7 @@ let rec parse_term = function
 		)
 	| _ -> raise (SyntaxError "Unexpected token_2.\n")
   
- (*parse*)
+ (* parse : string -> term *)
 let parse s = let (t, ts) =
 	parse_term (tokenize(string_to_list(s))) in
 	(
@@ -66,7 +66,7 @@ let parse s = let (t, ts) =
 	      | _ -> raise (SyntaxError "Unexpected input.\n")
 	)
   
- (*format_term*)
+ (* format_term : term -> string *)
 let rec format_term = function
   | Variable c -> "(" ^ c ^ ")"
   | Abstraction (id, t) -> "(" ^ "\\" ^ id ^ ". " ^ (format_term(t)) ^ ")"
