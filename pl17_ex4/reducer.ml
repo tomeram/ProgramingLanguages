@@ -36,26 +36,59 @@ let fresh_var variables_in_use =
 	)
 
 (* substitute : string -> term -> term -> term *)
+
 let rec substitute x t1 t2 =
 	match t2 with
-	| Variable v -> let parsed_x = (Variable x) in 
-		(
-		match parsed_x with
-		| (Variable v) -> t1
+	| Variable v -> (match v with
+		| q when q = x -> t1
 		| _ -> t2
 		)
 	| Application (s1,s2) -> (Application ((substitute x t1 s1),(substitute x t1 s2)))
-	| Abstraction (id,t) -> (let parsed_x = (Variable x) in 
-		match parsed_x with
-		| (Variable id) -> t2
+	| Abstraction (id,t) -> (match id with
+		| w when w = x -> t2 (* if x = y *)
 		| _ -> let free_vars = fv t1 in
 			(
 			let belongs = StringSet.mem id free_vars in
 				(
 				match belongs with
-				| false -> (Abstraction ( id,(substitute x t1 t)))
-				| true -> let z = fresh_var (StringSet.union (fv t) (fv t1)) in 
+				| false -> (Abstraction ( id,(substitute x t1 t))) (* if y <> x and y not belongs to fv(s) *)
+				| true -> let z = fresh_var (StringSet.union (fv t) (fv t1)) in (* if y <> x and y belongs to fv(s) *)
 				Abstraction ( z,(substitute x t1 (substitute id (Variable z) t)))
 				)
 			)
 		)
+
+(*
+	let rec substitute x t1 t2 = 
+
+	match t2 with
+	| Variable v -> if x=v then t1 else t2   
+	| Application (t1',t2') -> (Application ((substitute x t1 t1') , (substitute x t1 t2')))
+	
+	| Abstraction (y, t) -> 	
+		(
+			if (x=y)
+				then t2
+			else if (not (StringSet.exists (eq y) (fv t1))) 
+				then (Abstraction( y, (substitute x t1 t)))
+			else 
+				let z = fresh_var(StringSet.union (fv t1) (fv t)) in Abstraction( z, (substitute x t1 (substitute y (Variable z) t) ) )
+		)
+*)
+
+let rec reduce_strict = function
+	| Application (t1, t2) -> let reduced_t1 = reduce_strict(t1) in
+		(
+		match reduced_t1 with
+		| Some reduced_t1' -> Some(Application(reduced_t1', t2))
+		| None -> let reduced_t2 = reduce_strict(t2) in
+			(
+			match reduced_t2 with
+			| Some reduced_t2' -> Some(Application(t1, reduced_t2'))
+			| None -> (match t1 with
+				| Abstraction(x,t12) -> Some(substitute x t2 t12)
+				| _ -> None
+				)
+			)
+		)
+	| _ -> None
