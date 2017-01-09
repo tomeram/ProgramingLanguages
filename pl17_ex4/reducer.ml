@@ -18,7 +18,7 @@ let possible_variables = List.map (fun x -> char_to_string (char_of_int x)) ((ra
 *)
 (* fv : term -> StringSet.t *)
 let rec fv = function
-	| Variable v -> StringSet.add v StringSet.empty
+	| Variable v -> StringSet.singleton v
 	| Abstraction (id, t) -> StringSet.remove id (fv t)
 	| Application (t1, t2) -> StringSet.union (fv t1) (fv t2)
 
@@ -30,7 +30,7 @@ let fresh_var variables_in_use =
 		let n = StringSet.is_empty diff in
 		(
 		match n with
-		| false -> List.nth (StringSet.elements diff) 0
+		| false -> StringSet.choose diff
 		| true -> raise (OutOfVariablesError)
 		)
 	)
@@ -76,19 +76,33 @@ let rec substitute x t1 t2 =
 		)
 *)
 
+(* reduce_strict : term -> term option *)
 let rec reduce_strict = function
 	| Application (t1, t2) -> let reduced_t1 = reduce_strict(t1) in
 		(
 		match reduced_t1 with
-		| Some reduced_t1' -> Some(Application(reduced_t1', t2))
+		| Some reduced_t1' -> Some(Application(reduced_t1', t2)) (* E-App1 *)
 		| None -> let reduced_t2 = reduce_strict(t2) in
 			(
 			match reduced_t2 with
-			| Some reduced_t2' -> Some(Application(t1, reduced_t2'))
+			| Some reduced_t2' -> Some(Application(t1, reduced_t2')) (* E-App2 *)
 			| None -> (match t1 with
-				| Abstraction(x,t12) -> Some(substitute x t2 t12)
+				| Abstraction(x,t12) -> Some(substitute x t2 t12) (* E-AppAbs *)
 				| _ -> None
 				)
+			)
+		)
+	| _ -> None
+
+(* reduce_lazy : term -> term option *)
+let rec reduce_lazy = function
+	| Application (t1, t2) -> (match t1 with 
+		| Abstraction(x,t12) -> Some(substitute x t2 t12) (* E-AppAbs *)
+		| _ -> let reduced_t1 = reduce_lazy(t1) in
+			(
+			match reduced_t1 with
+			| Some reduced_t1' -> Some(Application(reduced_t1', t2)) (* E-App1 *)
+			| None -> None
 			)
 		)
 	| _ -> None
