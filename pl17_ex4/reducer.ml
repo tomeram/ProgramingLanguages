@@ -109,7 +109,7 @@ let rec reduce_lazy = function
 	
 	
 (* reduce_normal : term -> term option *)
-let reduce_normal = function
+let rec reduce_normal = function
 	| Application (t1, t2) ->                                      
 		(
 		match t1 with
