@@ -106,3 +106,27 @@ let rec reduce_lazy = function
 			)
 		)
 	| _ -> None
+	
+	
+(* reduce_normal : term -> term option *)
+let reduce_normal = function
+	| Application (t1, t2) ->                                      
+		(
+		match t1 with
+		| Abstraction(x, t12) -> Some(substitute x t2 t12) (* E-AppAbs *)
+		| _ -> let reduced_t1 = reduce_normal(t1) in 
+			(
+			match reduced_t1 with
+			| Some reduced_t1' -> Some(Application(reduced_t1', t2) (* E-App1 *)
+			| None -> let reduced_t2 = reduce_normal(t2) in
+				(
+				match reduced_t2 with
+					| Some reduced_t2' -> Some(Application(t1, reduced_t2') (* E-App2 *)
+					| None -> None
+	| Abstraction(id,t) -> let reduced_t = reduce_normal t in
+  		(
+      match reduced_t with 
+  			| Some reduced_t' -> Some(Abstraction(id,reduced_t')) (* E-Abs *)
+        | None -> None
+      )
+  | _ -> None
