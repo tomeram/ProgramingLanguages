@@ -58,24 +58,6 @@ let rec substitute x t1 t2 =
 			)
 		)
 
-(*
-	let rec substitute x t1 t2 = 
-
-	match t2 with
-	| Variable v -> if x=v then t1 else t2   
-	| Application (t1',t2') -> (Application ((substitute x t1 t1') , (substitute x t1 t2')))
-	
-	| Abstraction (y, t) -> 	
-		(
-			if (x=y)
-				then t2
-			else if (not (StringSet.exists (eq y) (fv t1))) 
-				then (Abstraction( y, (substitute x t1 t)))
-			else 
-				let z = fresh_var(StringSet.union (fv t1) (fv t)) in Abstraction( z, (substitute x t1 (substitute y (Variable z) t) ) )
-		)
-*)
-
 (* reduce_strict : term -> term option *)
 let rec reduce_strict = function
 	| Application (t1, t2) -> let reduced_t1 = reduce_strict(t1) in
@@ -127,9 +109,9 @@ let rec reduce_normal = function
 			)
 		)
 	| Abstraction(id,t) -> let reduced_t = reduce_normal t in
-  		(
+  			(
       		match reduced_t with 
   			| Some reduced_t' -> Some(Abstraction(id,reduced_t')) (* E-Abs *)
-        			| None -> None
-     		 )
+        	| None -> None
+     		)
   	| _ -> None
