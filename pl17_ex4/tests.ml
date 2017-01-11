@@ -80,6 +80,99 @@ let fact_s = (Z (\\f. (\\n. ((((test (iszero n)) (\\x. c1)) (\\x. (((times n) (f
 ((equal (fact_s c2)) c2)
 "
 
+(* Testing basic syntax *)
+let simple_test1 = "
+  a
+"
+
+let simple_test2 = "
+  (\\a.b)
+"
+
+let simple_test3 = "
+  (a b)
+"
+
+let simple_test4 = "
+  (a)
+"
+
+let simple_test5 = "
+  let a = b in c
+"
+
+(* multi rule tests *)
+let multi_test11 = "
+  let a = (\\b.c) in d
+"
+
+let multi_test12 = "
+  let a = b in (\\c.d)
+"
+
+let multi_test13 = "
+  let a = (\\b.c) in (\\d.e)
+"
+
+let multi_test21 = "
+  let a = (b c) in d
+"
+
+let multi_test22 = "
+  let a = b in (c d)
+"
+
+let multi_test23 = "
+  let a = (b c) in (d e)
+"
+
+let multi_test31 = "
+  let a = (\\a.c) in d
+"
+
+let multi_test32 = "
+  let a = b in (\\a.a)
+"
+
+let multi_test33 = "
+  let a = (\\a.b) in (\\a.a)
+"
+
+let multi_test41 = "
+  ((\\a.(a b)) d)
+"
+
+let multi_test42 = "
+  (d (\\a.(a b)))
+"
+
+let multi_test43 = "
+  ((\\a.(a b)) (\\c.(d e)))
+"
+
+(* Testing expressions with let *)
+let test_let1 = "
+  let foo = (\\a.a) in
+  (foo d)
+"
+
+let test_let2 = "
+  let foo = (\\a.a) in
+  let bar = (\\b.(foo b)) in
+  (bar c)
+"
+
+let test_let3 = "
+  let foo = (\\a.a) in
+  let bar = (\\b.(func b)) in
+  let func = (\\c.(bar c)) in
+  (func c)
+"
+
+let test_let4 = "
+  let foo = (\\a.(a a)) in
+  (foo foo)
+"
 
 let test ~verbose ~sem ~reduce s =
   printf "\nEvaluating:\n%s\nin %s semantics:\n\n" s sem;
@@ -102,4 +195,33 @@ let () =
   test_lazy ~verbose:false test_fact_l;
   test_strict ~verbose:false test_fact_s;
   test_normal ~verbose:false test_fact_l;
-  test_normal ~verbose:false test_fact_s
+  test_normal ~verbose:false test_fact_s;
+
+  (* Testing basic syntax *)
+  test_all ~verbose:true simple_test1;
+  test_all ~verbose:true simple_test2;
+  test_all ~verbose:true simple_test3;
+  test_all ~verbose:true simple_test4;
+  test_all ~verbose:true simple_test5;
+
+  (* multi rule tests *)
+  test_all ~verbose:true multi_test11;
+  test_all ~verbose:true multi_test12;
+  test_all ~verbose:true multi_test13;
+
+  test_all ~verbose:true multi_test21;
+  test_all ~verbose:true multi_test22;
+  test_all ~verbose:true multi_test23;
+
+  test_all ~verbose:true multi_test31;
+  test_all ~verbose:true multi_test32;
+  test_all ~verbose:true multi_test33;
+
+  test_all ~verbose:true multi_test41;
+  test_all ~verbose:true multi_test42;
+  test_all ~verbose:true multi_test43;
+
+  (* Testing expressions with let *)
+  test_all ~verbose:true test_let1;
+  test_all ~verbose:true test_let2;
+  test_all ~verbose:true test_let3;
