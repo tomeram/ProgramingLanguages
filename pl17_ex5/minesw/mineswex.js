@@ -87,7 +87,6 @@ function nxt() {
         if (row < SZ-1) {
             colwise(row+1);
         }
-
     }
 }
 
