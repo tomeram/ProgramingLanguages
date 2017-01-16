@@ -70,6 +70,7 @@ function nxt() {
 
         function colwise(row) {
             if (col > 0) reveal(row, col-1);
+            reveal(row, col);
             if (col < SZ-1) reveal(row, col+1);
         }
 
