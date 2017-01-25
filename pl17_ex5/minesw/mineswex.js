@@ -57,6 +57,36 @@ function nxt() {
     } else {
         $(this).text(value);
         /* ADD YOUR CODE HERE */
+
+        function reveal(row, col) {
+            var cell = get_cell(row, col);
+
+            if (!is_cell_hidden(cell) || board[row][col] == 1) {
+                return;
+            } else {
+                cell.fadeIn(nxt);
+            }
+        }
+
+        function colwise(row) {
+            if (col > 0) reveal(row, col-1);
+            reveal(row, col);
+            if (col < SZ-1) reveal(row, col+1);
+        }
+
+        if (value > 0) {
+            return;
+        }
+
+        if (row > 0) {
+            colwise(row-1);
+        }
+
+        colwise(row);
+
+        if (row < SZ-1) {
+            colwise(row+1);
+        }
     }
 }
 
